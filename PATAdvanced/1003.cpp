@@ -43,6 +43,8 @@ int main(){
                     w[v] = w[u] + weight[v];
                 }else if(dis[u]+e[u][v] == dis[v]){
                     num[v] += num[u];
+                    // 简洁写法
+                    // w[v] = max(w[v],w[u] + weight[v]);
                     if(w[u] + weight[v] > w[v])
                         w[v] = w[u] + weight[v];
                 }
