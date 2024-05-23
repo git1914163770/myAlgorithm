@@ -1,5 +1,6 @@
 // 超过k次短电话（不超过5分钟）给不同的人，但是不超过20%人回电
 // 两个嫌疑者互相打电话
+// https://blog.csdn.net/liuchuo/article/details/126222735
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -11,6 +12,7 @@ int Find(int a) {
 }
 void add(int a, int b) {
     int f1 = Find(a), f2 = Find(b);
+    // 小的作为根
     if (f1 < f2) p[f2] = f1;
     else p[f1] = f2;
 }
@@ -28,7 +30,6 @@ int main() {
                 if (record[j][i]) rec[i]++;
             }
         }
-        cout << rec[i] << endl;
         if (sc[i] > k && rec[i] * 5 <= sc[i]) su.push_back(i);
     }
     if (su.empty()) {
