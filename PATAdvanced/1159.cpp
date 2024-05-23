@@ -7,7 +7,8 @@ struct node{
     }
 }Tree[1005];
 // https://blog.csdn.net/qq_44799453/article/details/129056229
-// 满二叉树 2^k - 1节点数  
+// 和国内定义不同，满二叉树国内 2^k - 1节点数 应为完美二叉树 Perfect Binary Tree 
+// 题目中描述的是Full/Strictly Binary Tree
 // https://blog.csdn.net/liuchuo/article/details/126222917
 int In[35],Post[35];
 int n, m, a, b, root, f, Full;
