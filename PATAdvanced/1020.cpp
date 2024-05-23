@@ -9,10 +9,10 @@ struct TreeNode {
     TreeNode *right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
-
-
 // 可参考 https://blog.csdn.net/Weary_PJ/article/details/124861460
-//https://blog.csdn.net/liuchuo/article/details/52214833
+//https://blog.csdn.net/liuchuo/article/details/52137796
+//甲级1159
+
 TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
     if (postorder.empty()) return NULL;
 
