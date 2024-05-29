@@ -42,3 +42,7 @@ int main(){
     }
     return 0;
 }
+
+// 其他方法 使用string 翻转 记得补0
+// https://blog.csdn.net/qq_46527915/article/details/120918701
+// https://blog.csdn.net/liuchuo/article/details/52497341
