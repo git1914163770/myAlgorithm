@@ -57,3 +57,8 @@ int main() {
     dfs(root, root);
     return 0;
 }
+
+// 法2 https://huixiaoge.blog.csdn.net/article/details/121266786
+// 入栈顺序就是树的前序遍历的顺序
+// 出栈顺序就是树的中序遍历的顺序
+// 故问题，就转换成了根据前序遍历，中序遍历的顺序建树的过程。
