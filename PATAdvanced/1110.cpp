@@ -9,8 +9,8 @@ void dfs(int root, int index) {
         maxn = index;
         ans = root;
     }
-    if(a[root].l != -1) dfs(a[root].l, index * 2);
-    if(a[root].r != -1) dfs(a[root].r, index * 2 + 1);
+    if(a[root].l != -1) dfs(a[root].l, index * 2 + 1);
+    if(a[root].r != -1) dfs(a[root].r, index * 2 + 2);
 }
 int main() {
     int n, root = 0, have[100] = {0};
@@ -32,8 +32,8 @@ int main() {
         }
     }
     while (have[root] != 0) root++;
-    dfs(root, 1);
-    if (maxn == n)
+    dfs(root, 0);
+    if (maxn == n - 1)
         cout << "YES " << ans;
     else
         cout << "NO " << root;
