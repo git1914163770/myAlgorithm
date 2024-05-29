@@ -24,10 +24,11 @@ void dfs(int index, int tempSum, int tempK, int facSum) {
     }
     while(index >= 1) {
         if (tempSum + v[index] <= n) {
+            // 或者tempAns.push_back(index); dfs后pop_back(); 
+            // 同时去掉main中resize
             tempAns[tempK] = index;
             dfs(index, tempSum + v[index], tempK + 1, facSum + index);
         }
-        if (index == 1) return;
         index--;
     }
 }
