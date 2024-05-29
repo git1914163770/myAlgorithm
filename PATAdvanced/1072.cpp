@@ -2,8 +2,9 @@
 #include<iostream>
 #include<algorithm>
 #include<vector>
+#include<climits>
 using namespace std;
-const int inf = 999999999;
+const int inf = INT_MAX;
 int n, m, k, ds;
 int e[1020][1020], dis[1020];
 bool visit[1020];
@@ -48,7 +49,7 @@ int main() {
             if (u == -1) break;
             visit[u] = true;
             for (int v = 1; v <= n + m; v++) {
-                if (visit[v] == false && dis[v] > dis[u] + e[u][v])
+                if (visit[v] == false && e[u][v]!=inf && dis[v] > dis[u] + e[u][v])
                     dis[v] = dis[u] + e[u][v];
             }
         }
@@ -61,14 +62,11 @@ int main() {
             aver += 1.0 * dis[i];
         }
         if (mindis == -1) continue;
-        aver = aver / n ;
-        if (mindis > ansdis) {
-            ansid = index;
+        aver /= n ;
+        if(mindis > ansdis || (mindis == ansdis && aver < ansaver)){
             ansdis = mindis;
             ansaver = aver;
-        } else if (mindis == ansdis && aver < ansaver) {
             ansid = index;
-            ansaver = aver;
         }
     }
     if (ansid == -1)
