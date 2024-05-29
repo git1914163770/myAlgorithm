@@ -12,6 +12,10 @@ void dfs(int index,int level){
     }
 }
 
+vector<int> children[100]; // 即上面的v[100]
+// int level[100]; // 映射每个节点对应的层数
+
+
 int main(){
     int n,m;
     int id,k;
@@ -33,11 +37,9 @@ int main(){
         }
     }
     printf("%d %d",maxnum,maxlevel);
+    // bfs(); 法二
     return 0;
 }
-
-vector<int> children[100]; // 即上面的v[100]
-int level[100]; // 映射每个节点对应的层数
 
 void bfs() {
     int n, m, parent, numChildren, child;
@@ -52,30 +54,32 @@ void bfs() {
         }
     }
 
-    queue<int> q;
-    q.push(1); // 从根节点开始BFS
-    level[1] = 1; // 根节点所在层为第一层
-
+    queue<pair<int,int>> q;
+    q.push({1,1}); // 从根节点开始BFS
+    // level[1] = 1; // 根节点所在层为第一层
+    int maxl = 1,maxcnt = 0;
+    int cnt = 0;
+    int curl = -1;
     while (!q.empty()) {
-        int curr = q.front();
+        int curr = q.front().first;
+        int l = q.front().second;
         q.pop();
-        book[level[curr]]++; // 统计当前层的人数
-
+        // book[level[curr]]++; // 统计当前层的人数
+        if(l != curl){
+            cnt = 0;
+            curl = l;
+        }
+        cnt++;
+        if(cnt > maxcnt){
+            maxcnt = cnt;
+            maxl = l;
+        }
         // 将当前节点的子节点加入队列，并更新子节点的层数
         for (int child : children[curr]) {
-            level[child] = level[curr] + 1;
-            q.push(child);
+            // level[child] = level[curr] + 1;
+            q.push({child,l+1});
         }
     }
-
-    int maxPopulation = 0, maxGeneration = 1;
-    // 找出人数最多的一代
-    for (int i = 1; i < 100; ++i) {
-        if (book[i] > maxPopulation) {
-            maxPopulation = book[i];
-            maxGeneration = i;
-        }
-    }
-
-    printf("%d %d", maxPopulation, maxGeneration);
+    cout << maxcnt << " " << maxl;
 }
+
