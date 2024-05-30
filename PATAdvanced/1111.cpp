@@ -1,120 +1,138 @@
 #include<iostream>
-#include<algorithm>
 #include<vector>
+#include<cstdio>
+#include<algorithm>
 #include<climits>
+
 using namespace std;
+int n,m,st,ed;
 
+int e1[510][510],e2[510][510];
+int dist[510],fastpath[510];
+bool visit[510] = {false};
+vector<int> temppath,path,path2;
+vector<int> pre[510];
 const int inf = INT_MAX;
-//距离权重和时间权重图
-int e[510][510],w[510][510];
-//距离路径前驱 时间路径前驱
-int dispre[510], Timepre[510];
-//从原点到i的最短距离 最短时间
-int dis[510],Time[510];
-//第二个条件 最短时间 最少节点数
-int weight[510],NodeNum[510];
-
-bool visit[510];
-vector<int> dispath, Timepath, temppath;
-int st, fin, minnode = inf;
-void dfsdispath(int v) {
-    dispath.push_back(v);
-    if(v == st) return ;
-    dfsdispath(dispre[v]);
-}
-void dfsTimepath(int v) {
-    Timepath.push_back(v);
-    if(v == st) return ;
-    dfsTimepath(Timepre[v]);
-}
+int timemin = INT_MAX,nodenum = INT_MAX;
+int globalflag = 0;
 // 求最短路径（如果相同求时间最短的那条），一个求最快路径（如果相同求结点数最小的那条）
-int main() {
-    fill(dis, dis + 510, inf);
-    fill(Time, Time + 510, inf);
-    fill(weight, weight + 510, inf);
-    fill(e[0], e[0] + 510 * 510, inf);
-    fill(w[0], w[0] + 510 * 510, inf);
-    int n, m;
-    scanf("%d %d", &n, &m);
-    int a, b, flag, len, t;
-    for(int i = 0; i < m; i++) {
-        scanf("%d %d %d %d %d", &a, &b, &flag, &len, &t);
-        e[a][b] = len;
-        w[a][b] = t;
-        if(flag != 1) {
-            e[b][a] = len;
-            w[b][a] = t;
+void dfs(int v){
+    temppath.push_back(v);
+    if(v == st){
+        if(globalflag == 0){
+            int value = 0;
+            for(int i = temppath.size() - 1;i > 0;i--){
+                int id = temppath[i],idnext = temppath[i-1];
+                value+=e2[id][idnext];
+            }
+            if(value < timemin){
+                timemin = value;
+                path = temppath;
+            }
+        }else{
+            if(temppath.size() < nodenum){
+                nodenum = temppath.size();
+                path2 = temppath;
+            }
+        }
+        temppath.pop_back();
+        // 记得return
+        return;
+    }
+    for(int i = 0;i < pre[v].size();i++){
+        // cout << pre[v][i] << "hh";
+        dfs(pre[v][i]);
+    }
+    temppath.pop_back();
+}
+
+int main(){
+    fill(e1[0],e1[0]+510*510,inf);
+    fill(e2[0],e2[0]+510*510,inf);
+    fill(dist,dist+510,inf);
+    fill(fastpath,fastpath+510,inf);
+    scanf("%d %d",&n,&m);
+    int a,b,flag,len,t;
+    for(int i = 0;i < m;i++){
+        scanf("%d %d %d %d %d",&a,&b,&flag,&len,&t);
+        e1[a][b] = len;
+        e2[a][b] = t;
+        if(flag != 1){
+            e1[b][a] = len;
+            e2[b][a] = t;
         }
     }
-    scanf("%d %d", &st, &fin);
-    dis[st] = 0;
-    for(int i = 0; i < n; i++)
-        dispre[i] = i;
-    for(int i = 0; i < n; i++) {
-        int u = -1, minn = inf;
-        for(int j = 0; j < n; j++) {
-            if(visit[j] == false && dis[j] < minn) {
+    scanf("%d %d",&st,&ed);
+    dist[st] = 0;
+    for(int i = 0;i < n;i++){
+        int u = -1,minn = inf;
+        for(int j = 0;j < n;j++){
+            if(dist[j] < minn && !visit[j]){
                 u = j;
-                minn = dis[j];
+                minn = dist[j];
             }
         }
         if(u == -1) break;
+        // 记得visit[u] = true;
         visit[u] = true;
-        for(int v = 0; v < n; v++) {
-            if(visit[v] == false && e[u][v] != inf) {
-                if(e[u][v] + dis[u] < dis[v]) {
-                    dis[v] = e[u][v] + dis[u];
-                    dispre[v] = u;
-                    weight[v] = weight[u] + w[u][v];
-                } else if(e[u][v] + dis[u] == dis[v] && weight[v] > weight[u] + w[u][v]) {
-                    weight[v] = weight[u] + w[u][v];
-                    dispre[v] = u;
+        for(int v = 0;v < n;v++){
+            if(!visit[v] && e1[u][v] != inf){
+                if(dist[u]+e1[u][v] < dist[v]){
+                    dist[v] = dist[u] + e1[u][v];
+                    pre[v].clear();
+                    pre[v].push_back(u);
+                }else if(dist[u] + e1[u][v] == dist[v]){
+                    pre[v].push_back(u);
                 }
             }
         }
     }
-    dfsdispath(fin);
-    Time[st] = 0;
+    dfs(ed);
     // 一定要重新初始化visit
-    fill(visit, visit + 510, false);
-    for(int i = 0; i < n; i++) {
-        int u = -1, minn = inf;
-        for(int j = 0; j < n; j++) {
-            if(visit[j] == false && minn > Time[j]) {
+    fill(visit,visit+510,false);
+    fastpath[st] = 0;
+    temppath.clear();
+    for(int i = 0;i < n;i++){
+        int u = -1,minn = inf;
+        for(int j = 0;j < n;j++){
+            if(fastpath[j] < minn && !visit[j]){
                 u = j;
-                minn = Time[j];
+                minn = fastpath[j];
             }
         }
         if(u == -1) break;
         visit[u] = true;
-        for(int v = 0; v < n; v++) {
-            if(visit[v] == false && w[u][v] != inf) {
-                if(w[u][v] + Time[u] < Time[v]) {
-                    Time[v] = w[u][v] + Time[u];
-                    Timepre[v]=u;
-                    NodeNum[v]=NodeNum[u]+1;
-                } else if(w[u][v] + Time[u] == Time[v]&&NodeNum[u]+1<NodeNum[v]) {
-                    Timepre[v]=u;
-                    NodeNum[v]=NodeNum[u]+1;
+        for(int v = 0;v < n;v++){
+            if(!visit[v] && e2[u][v] != inf){
+                if(fastpath[u]+e2[u][v] < fastpath[v]){
+                    fastpath[v] = fastpath[u] + e2[u][v];
+                    pre[v].clear();
+                    pre[v].push_back(u);
+                }else if(fastpath[u] + e2[u][v] == fastpath[v]){
+                    pre[v].push_back(u);
                 }
             }
         }
     }
-    dfsTimepath(fin);
-    printf("Distance = %d", dis[fin]);
-    if(dispath == Timepath) {
-        printf("; Time = %d: ", Time[fin]);
-    } else {
-        printf(": ");
-        for(int i = dispath.size() - 1; i >= 0; i--) {
-            printf("%d", dispath[i]);
+    globalflag = 1;
+    dfs(ed);
+    if(path == path2){
+        printf("Distance = %d; Time = %d: ",dist[ed],fastpath[ed]);
+        for(int i = path.size()-1;i >= 0;i--){
+            printf("%d",path[i]);
             if(i != 0) printf(" -> ");
         }
-        printf("\nTime = %d: ", Time[fin]);
-    }
-    for(int i = Timepath.size() - 1; i >= 0; i--) {
-        printf("%d", Timepath[i]);
-        if(i != 0) printf(" -> ");
+    }else{
+        printf("Distance = %d: ",dist[ed]);
+        for(int i = path.size()-1;i >= 0;i--){
+            printf("%d",path[i]);
+            if(i != 0) printf(" -> ");
+        }
+        printf("\nTime = %d: ",fastpath[ed]);
+        for(int i = path2.size()-1;i >= 0;i--){
+            printf("%d",path2[i]);
+            if(i != 0) printf(" -> ");
+        }
     }
     return 0;
 }
