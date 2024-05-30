@@ -22,6 +22,28 @@ string dfs(int index){
     return c[index]+right;
 }
 // https://blog.csdn.net/liuchuo/article/details/126223594
+// 类似1030的处理方法，对没有左孩子但是有右孩子的特判
+void dfs2(int index){
+    if(L[index]==-1 && R[index] != -1){
+        cout << "(";
+        cout << c[index];
+        dfs2(R[index]);
+        cout << ")";
+        return;
+    }
+    // 由于不存只有左孩子且有有孩子的情况，四种情况剩下两种都要输出( 故注释掉合并
+    // if(L[index] != -1 && R[index]!= -1) cout << "(";
+    // if(L[index] == -1 && R[index]== -1) cout << "(";
+    cout << "(";
+    if(L[index]!=-1){
+        dfs2(L[index]);
+    }
+    if(R[index] != -1){
+        dfs2(R[index]);
+    }
+    cout << c[index];
+    cout << ")";
+}
 
 int main(){
     int n,l,r;
@@ -40,15 +62,10 @@ int main(){
         }
     }
     int root = 1;
-    // for(int i = 1;i <= n;i++){
-    //     if(!exist[i]) {
-    //         root = i;
-    //         break;
-    //     }
-    // }
     while(exist[root])root++;
-    cout << "(" + dfs(root) + ")";
+    // cout << "(" + dfs(root) + ")";
     
-    printf("\n");
+    // printf("\n");
+    dfs2(root);
     return 0;
 }
