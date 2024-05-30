@@ -42,6 +42,8 @@ int main(){
     }else{
         printf("Non-Eulerian");
     }
-    
     return 0;
 }
+
+// 法2 并查集 初始合并次数s = n; 每合并一次s-- 最后判断s是否为1
+// https://huixiaoge.blog.csdn.net/article/details/121505339
