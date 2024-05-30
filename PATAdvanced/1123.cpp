@@ -1,4 +1,5 @@
 // 算法笔记P322  https://blog.csdn.net/liuchuo/article/details/53561924
+// 判断是否为完全二叉树可以用1110的方法
 #include <iostream>
 #include <vector>
 #include <queue>
