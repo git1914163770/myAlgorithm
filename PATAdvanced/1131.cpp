@@ -15,12 +15,14 @@ int transferCnt(vector<int> a) {
     return cnt;
 }
 void dfs(int node, int cnt) {
-    if (node == end1 && (cnt < minCnt || (cnt == minCnt && transferCnt(tempPath) < minTransfer))) {
-        minCnt = cnt;
-        minTransfer = transferCnt(tempPath);
-        path = tempPath;
-    }
-    // if (node == end1) return;
+    if (node == end1){
+        if(cnt < minCnt || (cnt == minCnt && transferCnt(tempPath) < minTransfer)) {
+            minCnt = cnt;
+            minTransfer = transferCnt(tempPath);
+            path = tempPath;
+        }
+        return;
+    } 
     for (int i = 0; i < v[node].size(); i++) {
         if (visit[v[node][i]] == 0) {
             visit[v[node][i]] = 1;
@@ -54,15 +56,17 @@ int main() {
         dfs(start, 0);
         visit[start] = 0;
         printf("%d\n", minCnt);
-        int preLine = 0, preTransfer = start;
-        for (int j = 1; j < path.size(); j++) {
-            if (line[path[j-1]*10000+path[j]] != preLine) {
-                if (preLine != 0) printf("Take Line#%d from %04d to %04d.\n", preLine, preTransfer, path[j-1]);
-                preLine = line[path[j-1]*10000+path[j]];
-                preTransfer = path[j-1];
+        int preLine = line[path[0]*10000+path[1]],preTransfer = start;
+        for(int j = 1;j < path.size() - 1;j++){
+            if(line[path[j]*10000+path[j+1]]!=preLine){
+                // 在转站时打印上一条信息
+                printf("Take Line#%d from %04d to %04d.\n", preLine, preTransfer, path[j]);
+                preLine = line[path[j]*10000+path[j+1]];
+                preTransfer = path[j];
             }
         }
-        printf("Take Line#%d from %04d to %04d.\n", preLine, preTransfer, end1);
+        // 结束时打印剩下的（最后未转站，所以上面没打印）
+        printf("Take Line#%d from %04d to %04d.\n", preLine, preTransfer, path[path.size()-1]);
     }
     return 0;
 }
