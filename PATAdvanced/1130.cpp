@@ -24,17 +24,6 @@ string dfs(int index){
     return left + v[index].val + right;
 }
 
-// string s;
-// void dfs(int u)
-// {
-//     if(u==-1) return;
-//     if(!(l[u]==-1&&r[u]==-1)) s+="(";
-//     if(l[u]!=-1) dfs(l[u]);
-//     s+=val[u];
-//     if(r[u]!=-1) dfs(r[u]);
-//     if(!(l[u]==-1&&r[u]==-1)) s+=")";
-// }
-
 int main(){
     int n;
     cin >> n;

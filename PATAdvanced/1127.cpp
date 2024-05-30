@@ -3,7 +3,6 @@
 #include <stack>
 #include <queue>
 #include <unordered_map>
-// 待修改
 using namespace std;
 
 struct TreeNode {
@@ -84,3 +83,7 @@ int main() {
 
     return 0;
 }
+
+// 法2 使用vector<int> v[N] 保存每层节点 同时queue<pair<int,int>> q ,每个节点存当前层数
+// https://blog.csdn.net/liuchuo/article/details/60580953
+// https://huixiaoge.blog.csdn.net/article/details/121523950
