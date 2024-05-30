@@ -24,6 +24,20 @@ string dfs(int index){
     return left + v[index].val + right;
 }
 
+void dfs2(int index){
+    if(v[index].left!=-1){
+        if(!is_leaf[v[index].left]) cout << "(";
+        dfs2(v[index].left);
+        if(!is_leaf[v[index].left]) cout << ")";
+    }
+    cout << v[index].val;
+    if(v[index].right != -1){
+        if(!is_leaf[v[index].right]) cout << "(";
+        dfs2(v[index].right);
+        if(!is_leaf[v[index].right]) cout << ")";
+    }
+}
+
 int main(){
     int n;
     cin >> n;
@@ -36,6 +50,7 @@ int main(){
         if(v[i].left == -1 && v[i].right == -1) is_leaf[i] = true;
     }
     while(father[root]) root++;
-    cout << dfs(root) << endl;
+    // cout << dfs(root) << endl;
+    dfs2(root);
     return 0;
 }
