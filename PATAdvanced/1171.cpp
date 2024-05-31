@@ -13,11 +13,14 @@
 
 #include<iostream>
 #include<queue>
+#include<climits>
 using namespace std;
 // index 当前正在处理的下标 now 从优先队列中取出的最小值
 // A 输入数据
 int n,m,A[100005],index,now;
 priority_queue<int,vector<int>,greater<int>> Q1,Q2;
+
+
 int main(){
     cin >> n >> m;
     for(int i = 1;i <= n;i++){
@@ -30,6 +33,7 @@ int main(){
         printf("%d",now);
         Q1.pop();
         if(index <= n){
+            // 放在Q2中备用
             if(A[index] < now) Q2.push(A[index]);
             else Q1.push(A[index]);
             index++;
@@ -40,5 +44,43 @@ int main(){
             printf("\n");
         }
     }
+    // func2();
     return 0;
+}
+// 自己想的，但超时
+void func2(){
+    int n,k;
+    scanf("%d %d",&n,&k);
+    int temp[n+1];
+    int arr[k];
+    for(int i = 0;i < n;i++){
+        scanf("%d",&temp[i]);
+    }
+    for(int i = 0;i < k;i++){
+        arr[i] = temp[i];
+    }
+    int index = k,minn,minidx = -1;
+    int pre = INT_MIN;
+    int f = 0;
+    while(index < n+k){
+        minn = INT_MAX;
+        for(int i = 0;i < k;i++){
+            if(arr[i] < minn && arr[i] > pre){
+                minn = arr[i];
+                minidx = i;
+            }
+        }
+        if(minn == INT_MAX){
+            pre = INT_MIN;
+            printf("\n");
+            f = 0;
+            continue;
+        }
+        pre = minn;
+        if(f) printf(" ");else f = 1;
+        printf("%d",minn);
+        if(index < n)
+            arr[minidx] = temp[index];
+        index++;
+    }
 }
