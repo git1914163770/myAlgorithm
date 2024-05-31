@@ -10,7 +10,9 @@
 // 15
 // https://www.bilibili.com/video/BV1b7411N798?p=98&vd_source=5ade3cf0f543475963e7d592cc8e27d0
 // https://blog.csdn.net/liuchuo/article/details/134354244
-
+// https://blog.csdn.net/qq_43382350/article/details/129243773
+// https://blog.csdn.net/qq_46107391/article/details/128976968
+// https://blog.csdn.net/hzj913313180/article/details/130717200
 #include<iostream>
 #include<queue>
 #include<climits>
@@ -65,7 +67,8 @@ void func2(){
     while(index < n+k){
         minn = INT_MAX;
         for(int i = 0;i < k;i++){
-            if(arr[i] < minn && arr[i] > pre){
+            // 题目说不小于 也即>=都放进去
+            if(arr[i] < minn && arr[i] >= pre){
                 minn = arr[i];
                 minidx = i;
             }
