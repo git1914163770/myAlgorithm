@@ -25,6 +25,7 @@ int main(){
         cin >> s;
         if (!superior.count(s)) cout << "Error: " << s << " is not found.\n";
         else {
+            // 或者用vector 保存 然后倒着遍历
             ans = "\n";
             while (s != root) {
                 ans = "->" + s + ans;
