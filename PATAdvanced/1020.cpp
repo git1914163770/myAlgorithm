@@ -1,7 +1,18 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include<iostream>
+#include<cstdio>
+#include<vector>
+#include<unordered_map>
+#include<queue>
+
 using namespace std;
+
+int postOrder[35],inOrder[30];
+unordered_map<int,int> pos;
+vector<int> res;
+
+//其他方法 不用bfs 根据节点下标赋值
+//https://blog.csdn.net/liuchuo/article/details/52137796
+//甲级1159
 
 struct TreeNode {
     int val;
@@ -9,68 +20,49 @@ struct TreeNode {
     TreeNode *right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
-// 可参考 https://blog.csdn.net/Weary_PJ/article/details/124861460
-//https://blog.csdn.net/liuchuo/article/details/52137796
-//甲级1159
 
-TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-    if (postorder.empty()) return NULL;
-
-    int rootValue = postorder[postorder.size() - 1];
-    TreeNode* root = new TreeNode(rootValue);
-    if(postorder.size() == 1) return root;
-    int delimiterIndex = 0;
-    for (; delimiterIndex < inorder.size(); delimiterIndex++) {
-        if (inorder[delimiterIndex] == rootValue) break;
-    }
-
-    vector<int> leftInorder(inorder.begin(), inorder.begin() + delimiterIndex);
-    vector<int> rightInorder(inorder.begin() + delimiterIndex + 1, inorder.end());
-    vector<int> leftPostorder(postorder.begin(), postorder.begin() + leftInorder.size());
-    // postorder.pop_back();
-    vector<int> rightPostorder(postorder.begin() + leftInorder.size(), postorder.end()-1);
-
-    root->left = buildTree(leftInorder, leftPostorder);
-    root->right = buildTree(rightInorder, rightPostorder);
-
-    return root;
+TreeNode* buildTree(int postStart,int postEnd,int inStart,int inEnd){
+    if(postStart>postEnd) return NULL;
+    int root=postOrder[postEnd];
+    TreeNode* rootNode=new TreeNode(root);
+    // int k=inStart;
+    // while(inOrder[k]!=root) k++;
+    int k=pos[root];
+    int leftNum=k-inStart;
+    rootNode->left = buildTree(postStart,postStart+leftNum-1,inStart,k-1);
+    rootNode->right = buildTree(postStart+leftNum,postEnd-1,k+1,inEnd);
+    return rootNode;
 }
 
-void bfs(TreeNode* root) {
-    if (!root) return;
-
+void bfs(TreeNode* root){
+    if(root==NULL) return;
     queue<TreeNode*> q;
     q.push(root);
-    int flag = 0;
-
-    while (!q.empty()) {
-        if(flag!=0){
-            printf(" ");
-        }
-        flag = 1;
-        TreeNode* node = q.front();
-        printf("%d",node->val);
+    while(!q.empty()){
+        TreeNode* node=q.front();
         q.pop();
-        if (node->left) q.push(node->left);
-        if (node->right) q.push(node->right);
+        res.push_back(node->val);
+        if(node->left!=NULL) q.push(node->left);
+        if(node->right!=NULL) q.push(node->right);
     }
 }
 
-int main() {
-    int N;
-    cin >> N;
+int main(){
 
-    vector<int> postorder(N);
-    vector<int> inorder(N);
-    for (int i = 0; i < N; i++) {
-        scanf("%d",&postorder[i]);
+    int n;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++){
+        scanf("%d",&postOrder[i]);
     }
-    for (int i = 0; i < N; i++) {
-        scanf("%d",&inorder[i]);
+    for(int i=0;i<n;i++){
+        scanf("%d",&inOrder[i]);
+        pos[inOrder[i]]=i;
     }
-
-    TreeNode* root = buildTree(inorder, postorder);
+    TreeNode* root = buildTree(0,n-1,0,n-1);
     bfs(root);
-
+    for(int i=0;i<res.size();i++){
+        if(i!=0) printf(" ");
+        printf("%d",res[i]);
+    }
     return 0;
 }
