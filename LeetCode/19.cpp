@@ -7,7 +7,7 @@ public:
         dummyHead->next = head;
         ListNode* p = dummyHead;
         ListNode* slow = dummyHead;
-        // 1 <= n <= sz 不用加p !+ null 判断
+        // 1 <= n <= sz 不用加p != null 判断
         while(n--){
             p = p->next;
         }
