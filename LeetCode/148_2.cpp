@@ -1,13 +1,5 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
+// https://leetcode.cn/problems/sort-list/solutions/2602280/javapython3cgui-bing-pai-xu-huo-qu-lian-lakrs/
+// 迭代法
 class Solution {
 public:
     ListNode* sortList(ListNode* head) { 
@@ -36,9 +28,9 @@ public:
      * 如果链表长度为偶数，返回中间靠左的那个节点
     */
     ListNode* getMid(ListNode* head){
-        if(!head)return head;   
-        ListNode* slow = head, *fast = head->next;          // 快慢指针，慢指针初始为
-        while(fast != nullptr && fast->next != nullptr)     
+        // if(!head)return head;   // 已经在mergeSort判断过了
+        ListNode* slow = head, *fast = head;          // 快慢指针，慢指针初始为
+        while(fast->next != nullptr && fast->next->next != nullptr)     
         {
             fast = fast->next->next;    // 快指针每次移动两个节点
             slow = slow->next;          // 慢指针每次移动一个节点
